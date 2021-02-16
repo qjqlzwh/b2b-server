@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>b2b-server</artifactId>
+        <groupId>com.lik</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>shop-common</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>common-core</module>
+        <module>common-storage</module>
+        <module>common-swagger</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+   <!-- <build>
+        <plugins>
+            <plugin>
+                &lt;!&ndash;提供打包(将应用打包成可执行的jar包)&ndash;&gt;
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                &lt;!&ndash; 指定maven编译的jdk版本 &ndash;&gt;
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <fork>true</fork>
+                    &lt;!&ndash;你的jdk地址&ndash;&gt;
+                    <executable>D:/Java/jdk1.8.0_201/bin/javac</executable>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>-->
+</project>
