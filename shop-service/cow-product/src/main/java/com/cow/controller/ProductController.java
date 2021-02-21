@@ -27,6 +27,15 @@ public class ProductController {
     private ProductService productService;
 
     /**
+     * 加载列表数据
+     */
+    @GetMapping("/list")
+    public R list(ProductDTO productDTO) {
+        Page<Product> page = productService.pageData(productDTO);
+        return R.ok().data(page);
+    }
+
+    /**
      * 新增
      */
     @PostMapping("/add")
@@ -57,12 +66,15 @@ public class ProductController {
     }
 
     /**
-     * 加载列表数据
+     * 根据id获取
+     *
+     * @param id
+     * @return
      */
-    @GetMapping("/list")
-    public R list(ProductDTO productDTO) {
-        Page<Product> page = productService.pageData(productDTO);
-        return R.ok().data(page);
+    @GetMapping("/info/{id}")
+    public Product info(@PathVariable("id") Long id) {
+        return productService.getById(id);
     }
+
 }
 

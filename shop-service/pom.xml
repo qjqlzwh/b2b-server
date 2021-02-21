@@ -17,6 +17,7 @@
         <module>cow-openfeign-client</module>
         <module>cow-product</module>
         <module>cow-oss</module>
+        <module>cow-order</module>
     </modules>
 
     <properties>

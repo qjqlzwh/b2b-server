@@ -8,7 +8,7 @@ import com.cow.po.pojo.User;
  *  Mapper 接口
  * </p>
  *
- * @author lik
+ * @author row
  * @since 2020-12-24
  */
 public interface UserMapper extends BaseMapper<User> {

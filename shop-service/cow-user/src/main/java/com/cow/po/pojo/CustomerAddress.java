@@ -61,6 +61,8 @@ public class CustomerAddress implements Serializable {
     @ApiModelProperty(value = "是否启用 0禁用  1启用")
     private Boolean isEnabled;
 
+    @ApiModelProperty(value = "是否默认 0否  1是")
+    private Boolean isDefault;
 
     public Long getId() {
         return id;
@@ -158,4 +160,11 @@ public class CustomerAddress implements Serializable {
         this.isEnabled = isEnabled;
     }
 
+    public Boolean getIsDefault() {
+        return this.isDefault;
+    }
+
+    public void setIsDefault(Boolean aDefault) {
+        this.isDefault = aDefault;
+    }
 }

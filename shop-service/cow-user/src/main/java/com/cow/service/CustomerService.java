@@ -5,6 +5,8 @@ import com.cow.po.dto.CustomerDTO;
 import com.cow.po.pojo.Customer;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -34,4 +36,10 @@ public interface CustomerService extends IService<Customer> {
      */
     void update(Customer customer);
 
+    /**
+     * 弹框分页数据
+     * @param customerDTO
+     * @return
+     */
+    Page<Map<String, Object>> pageDataPop(CustomerDTO customerDTO);
 }

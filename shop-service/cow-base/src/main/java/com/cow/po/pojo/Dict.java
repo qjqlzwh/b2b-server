@@ -40,6 +40,9 @@ public class Dict implements Serializable {
     @ApiModelProperty(value = "词汇名")
     private String dname;
 
+    @ApiModelProperty(value = "词汇值（同一类型字典的值不能重复）")
+    private String dvalue;
+
     @ApiModelProperty(value = "上级id")
     private Long parentId;
 
@@ -97,6 +100,14 @@ public class Dict implements Serializable {
 
     public void setDname(String dname) {
         this.dname = dname;
+    }
+
+    public String getDvalue() {
+        return this.dvalue;
+    }
+
+    public void setDvalue(String dvalue) {
+        this.dvalue = dvalue;
     }
 
     public Long getParentId() {

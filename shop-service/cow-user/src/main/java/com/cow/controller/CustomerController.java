@@ -48,6 +48,25 @@ public class CustomerController {
     }
 
     /**
+     * 加载弹框列表数据
+     */
+    @GetMapping("/popList")
+    public R popList(CustomerDTO customerDTO) {
+        Page<Map<String, Object>> page = customerService.pageDataPop(customerDTO);
+        return R.ok().data(page);
+    }
+
+    /**
+     * 加载弹框列表数据(客户收货地址)
+     */
+    @GetMapping("/popAddressList")
+    public R popAddressList(CustomerDTO customerDTO) {
+        Page<CustomerAddress> page = customerAddressService.page(customerDTO.page(),
+                Wrappers.<CustomerAddress>lambdaQuery().eq(CustomerAddress::getCustomerId, customerDTO.getId()));
+        return R.ok().data(page);
+    }
+
+    /**
      * 新增
      */
     @PostMapping("/add")
@@ -79,6 +98,27 @@ public class CustomerController {
         User salesman = userService.getById(customer.getSalesman());
         customerMap.put("salesmanName", salesman.getUsername());
         return R.ok().data(customerMap);
+    }
+
+    /**
+     * 根据id获取
+     */
+    @GetMapping("/info/{id}")
+    public R info(@PathVariable("id") Long id) {
+        Customer customer = customerService.getById(id);
+        return R.ok().data(customer);
+    }
+
+    /**
+     * 根据id获取客户默认收货地址
+     */
+    @GetMapping("/getDefaultAddr/{id}")
+    public R getDefaultAddr(@PathVariable("id") Long id) {
+        CustomerAddress address = customerAddressService.getOne(
+                Wrappers.<CustomerAddress>lambdaQuery()
+                        .eq(CustomerAddress::getCustomerId, id)
+                        .eq(CustomerAddress::getIsDefault, true));
+        return R.ok().data(address);
     }
 }
 

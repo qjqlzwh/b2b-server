@@ -9,6 +9,8 @@ import com.cow.mapper.ProductMapper;
 import com.cow.service.ProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * <p>
@@ -27,8 +29,16 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @param product
      */
     @Override
+    @Transactional
     public void add(Product product) {
-
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        product.setDcode(String.valueOf(System.currentTimeMillis()));
+        handleSaveOrUpdate(product);
+        baseMapper.insert(product);
     }
 
     /**
@@ -37,8 +47,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * @param product
      */
     @Override
+    @Transactional
     public void update(Product product) {
+        handleSaveOrUpdate(product);
+        baseMapper.updateById(product);
+    }
 
+    private void handleSaveOrUpdate(Product product) {
+        Assert.hasText(product.getDname(), "产品名称不能为空！");
     }
 
     /**

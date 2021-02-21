@@ -1,7 +1,9 @@
 package com.cow.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cow.mybatis.QwUtils;
 import com.cow.po.dto.CategoryDTO;
 import com.cow.po.pojo.Category;
 import com.cow.mapper.CategoryMapper;
@@ -14,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * <p>
- *  服务实现类
+ *  产品分类 服务实现类
  * </p>
  *
  * @author cow
@@ -100,6 +102,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      */
     @Override
     public Page<Category> pageData(CategoryDTO categoryDTO) {
-        return null;
+        QueryWrapper<Category> qw = new QueryWrapper<>();
+        QwUtils.eq(qw, "dname", categoryDTO.getDname());
+        qw.isNull("parent_id");
+        qw.orderByDesc("id");
+        Page<Category> dataPage = baseMapper.selectPage(categoryDTO.page(), qw);
+        return dataPage;
     }
 }

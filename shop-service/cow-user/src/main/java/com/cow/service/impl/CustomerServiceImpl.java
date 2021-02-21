@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -36,6 +38,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     private CustomerAddressService customerAddressService;
     @Autowired
     private UserService userService;
+    @Resource
+    private CustomerMapper customerMapper;
 
     /**
      * 列表数据
@@ -100,6 +104,17 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         handleSaveOrUpdate(customer);
         baseMapper.updateById(customer);
         customerAddressService.saveOrUpdateBatch(customer.getCustomerAddressList());
+    }
+
+    /**
+     * 弹框分页数据
+     *
+     * @param customerDTO
+     * @return
+     */
+    @Override
+    public Page<Map<String, Object>> pageDataPop(CustomerDTO customerDTO) {
+        return customerMapper.pageDataPop(customerDTO.page(), customerDTO);
     }
 
     private void handleSaveOrUpdate(Customer customer) {

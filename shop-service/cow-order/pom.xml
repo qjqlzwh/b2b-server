@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cow-base</artifactId>
+    <artifactId>cow-order</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -24,16 +24,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>com.lik</groupId>
+            <artifactId>cow-openfeign-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>com.alicp.jetcache</groupId>
-            <artifactId>jetcache-starter-redis</artifactId>
-            <version>2.6.0</version>
-        </dependency>-->
-
     </dependencies>
-
 </project>
