@@ -5,6 +5,8 @@ import com.cow.po.dto.ProductDTO;
 import com.cow.po.pojo.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  *  产品服务类
@@ -33,4 +35,11 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     Page<Product> pageData(ProductDTO productDTO);
+
+    /**
+     * 加载弹框列表数据(带价格产品，如订单选产品)
+     * @param productDTO
+     * @return
+     */
+    Page<Map<String, Object>> popPriceList(ProductDTO productDTO);
 }

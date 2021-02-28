@@ -1,21 +1,12 @@
-package com.cow.po.dto;
+package com.cow.feign.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.cow.dto.PageDTO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * 产品
- */
-public class ProductDTO extends PageDTO {
+public class ProductVo {
 
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "创建时间")
@@ -45,14 +36,14 @@ public class ProductDTO extends PageDTO {
     @ApiModelProperty(value = "是否上架")
     private Boolean isShelves;
 
-    @ApiModelProperty(value = "开始时间")
-    private Date startTime;
 
-    @ApiModelProperty(value = "结束时间")
-    private Date endTime;
+    public Long getId() {
+        return this.id;
+    }
 
-    @ApiModelProperty(value = "客户（bs_customer）")
-    private Long customer;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Date getCreateTime() {
         return this.createTime;
@@ -124,29 +115,5 @@ public class ProductDTO extends PageDTO {
 
     public void setIsShelves(Boolean shelves) {
         this.isShelves = shelves;
-    }
-
-    public Date getStartTime() {
-        return this.startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return this.endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public Long getCustomer() {
-        return this.customer;
-    }
-
-    public void setCustomer(Long customer) {
-        this.customer = customer;
     }
 }

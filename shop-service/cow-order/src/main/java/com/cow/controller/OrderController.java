@@ -3,6 +3,7 @@ package com.cow.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.po.dto.OrderDTO;
+import com.cow.po.enums.OrderState;
 import com.cow.po.pojo.Order;
 import com.cow.service.OrderService;
 import com.cow.resp.R;
@@ -48,6 +49,25 @@ public class OrderController {
     @PostMapping("/update")
     public R update(@RequestBody Order order) {
         orderService.update(order);
+        return R.ok();
+    }
+
+    /**
+     * 提交
+     */
+    @PostMapping("/submit")
+    public R submit(@RequestBody Order order) {
+        orderService.submit(order);
+        return R.ok();
+    }
+
+    /**
+     * 审核
+     */
+    @PostMapping("/audit")
+    public R audit(Long id) {
+        Order order = orderService.getById(id);
+        orderService.audit(order);
         return R.ok();
     }
 

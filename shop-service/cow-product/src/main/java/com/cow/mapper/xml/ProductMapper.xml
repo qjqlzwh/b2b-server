@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cow.mapper.ProductMapper">
 
+    <select id="popPriceList" resultType="java.util.Map">
+        select pp.id product_price_id, pp.sn product_price_sn, pp.dname product_price_name, pp.start_time, pp.end_time
+            , pc.id customer_item_id, pc.customer, pg.id product_item_id, pg.quantity, pg.use_quantity, pg.price
+            , pg.product, p.dname product_name, p.dcode product_code, p.model product_model, p.unit product_unit
+        from bs_product_price pp
+            join bs_product_price_customer_item pc on pc.product_price = pp.id
+            join bs_product_price_goods_item pg on pg.product_price = pp.id
+            join bs_product p on p.id = pg.product
+        where pp.state = 2
+            and <![CDATA[ pp.start_time <= #{productDTO.startTime} ]]>
+            and <![CDATA[ pp.end_time > #{productDTO.endTime} ]]>
+            and pc.customer = #{productDTO.customer}
+            and pc.state = 2
+            and pg.quantity > pg.use_quantity
+            and pg.state = 2
+    </select>
 </mapper>

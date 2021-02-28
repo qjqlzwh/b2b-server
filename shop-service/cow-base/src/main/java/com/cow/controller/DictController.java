@@ -59,6 +59,8 @@ public class DictController {
     @GetMapping("/detail/{id}")
     public R detail(@PathVariable("id") Long id) {
         Dict dict = dictService.getById(id);
+        List<Dict> childList = dictService.list(Wrappers.<Dict>lambdaQuery().eq(Dict::getParentId, id));
+        dict.setChildDict(childList);
         return R.ok().data(dict);
     }
 
@@ -86,11 +88,9 @@ public class DictController {
     /**
      * 根据id获取字典
      */
-    @GetMapping("/getDict/{id}")
-    public R getDict(@PathVariable("id") Long id) {
+    @GetMapping("/info/{id}")
+    public R info(@PathVariable("id") Long id) {
         Dict dict = dictService.getById(id);
-        List<Dict> childList = dictService.list(Wrappers.<Dict>lambdaQuery().eq(Dict::getParentId, id));
-        dict.setChildDict(childList);
         return R.ok().data(dict);
     }
 

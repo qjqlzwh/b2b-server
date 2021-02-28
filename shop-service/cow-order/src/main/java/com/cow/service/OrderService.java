@@ -33,4 +33,17 @@ public interface OrderService extends IService<Order> {
      * @param order
      */
     void update(Order order);
+
+    /**
+     * 提交
+     * @param order
+     */
+    void submit(Order order);
+
+    /**
+     * 审核
+     * @param order
+     */
+    void audit(Order order);
+
 }

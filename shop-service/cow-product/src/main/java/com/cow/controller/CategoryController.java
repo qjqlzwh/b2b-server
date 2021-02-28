@@ -1,6 +1,7 @@
 package com.cow.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.po.dto.CategoryDTO;
 import com.cow.po.dto.ProductDTO;
@@ -10,6 +11,8 @@ import com.cow.resp.R;
 import com.cow.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -63,6 +66,15 @@ public class CategoryController {
     public R list(CategoryDTO categoryDTO) {
         Page<Category> page = categoryService.pageData(categoryDTO);
         return R.ok().data(page);
+    }
+
+    /**
+     * 加载子数据
+     */
+    @GetMapping("/getChild/{parentId}")
+    public R getChild(@PathVariable("parentId") Long parentId) {
+        List<Category> childList = categoryService.list(Wrappers.<Category>lambdaQuery().eq(Category::getParentId, parentId));
+        return R.ok().data(childList);
     }
 
 }

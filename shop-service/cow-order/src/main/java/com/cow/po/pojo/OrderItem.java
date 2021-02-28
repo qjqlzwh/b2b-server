@@ -26,14 +26,14 @@ public class OrderItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    @TableField(fill = FieldFill.INSERT)
     private Long id;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     @ApiModelProperty(value = "最后更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     @ApiModelProperty(value = "订单主表")
@@ -66,6 +66,14 @@ public class OrderItem implements Serializable {
     @ApiModelProperty(value = "总价")
     private BigDecimal totalPrice;
 
+    @ApiModelProperty(value = "价格表（bs_product_price）")
+    private Long productPriceId;
+
+    @ApiModelProperty(value = "价格表名称")
+    private String productPriceName;
+
+    @ApiModelProperty(value = "价格明细（bs_product_price_goods_item）")
+    private Long productPriceGoodsItem;
 
     public Long getId() {
         return id;
@@ -171,4 +179,27 @@ public class OrderItem implements Serializable {
         this.totalPrice = totalPrice;
     }
 
+    public Long getProductPriceId() {
+        return this.productPriceId;
+    }
+
+    public void setProductPriceId(Long productPriceId) {
+        this.productPriceId = productPriceId;
+    }
+
+    public String getProductPriceName() {
+        return this.productPriceName;
+    }
+
+    public void setProductPriceName(String productPriceName) {
+        this.productPriceName = productPriceName;
+    }
+
+    public Long getProductPriceGoodsItem() {
+        return this.productPriceGoodsItem;
+    }
+
+    public void setProductPriceGoodsItem(Long productPriceGoodsItem) {
+        this.productPriceGoodsItem = productPriceGoodsItem;
+    }
 }

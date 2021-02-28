@@ -61,6 +61,9 @@ public class Order implements Serializable {
     @ApiModelProperty(value = "订单总金额")
     private BigDecimal totalPrice;
 
+    @ApiModelProperty(value = "审核时间")
+    private Date auditTime;
+
     @ApiModelProperty(value = "备注")
     private String memo;
 
@@ -175,6 +178,14 @@ public class Order implements Serializable {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Date getAuditTime() {
+        return this.auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
     }
 
     public String getMemo() {

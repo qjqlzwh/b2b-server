@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Date;
+import java.util.Map;
+
 /**
  * <p>
  *  产品服务实现类
@@ -73,5 +76,18 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         qw.orderByDesc("id");
         Page<Product> pageData = baseMapper.selectPage(productDTO.page(), qw);
         return pageData;
+    }
+
+    /**
+     * 加载弹框列表数据(带价格产品，如订单选产品)
+     *
+     * @param productDTO
+     * @return
+     */
+    @Override
+    public Page<Map<String, Object>> popPriceList(ProductDTO productDTO) {
+        productDTO.setStartTime(new Date());
+        productDTO.setEndTime(new Date());
+        return baseMapper.popPriceList(productDTO.page(), productDTO);
     }
 }

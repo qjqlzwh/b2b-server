@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cow.mapper.ProductPriceMapper">
+
+    <select id="getCustomerItemById" resultType="java.util.Map">
+        select ppc.id, ppc.product_price productPrice, ppc.seq, ppc.state, ppc.invalid_time invalidTime
+             , ppc.customer, c.dname customerName, c.dcode customerCode
+        from bs_product_price pp
+             left join bs_product_price_customer_item ppc on ppc.product_price = pp.id
+             left join bs_customer c on c.id = ppc.customer
+        where pp.id = #{productPriceId}
+    </select>
+
+    <select id="getProductItemById" resultType="java.util.Map">
+        select ppg.id, ppg.product_price productPrice, ppg.seq, ppg.state, ppg.invalid_time invalidTime, ppg.price, ppg.quantity
+             , ppg.product, p.dname productName, p.dcode productCode, p.model productModel, p.unit proudctUnit
+        from bs_product_price pp
+             left join bs_product_price_goods_item ppg on ppg.product_price = pp.id
+             left join bs_product p on p.id = ppg.product
+        where pp.id = #{productPriceId}
+    </select>
+</mapper>

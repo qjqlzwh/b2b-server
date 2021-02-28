@@ -28,5 +28,11 @@
             <artifactId>cow-openfeign-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-all</artifactId>
+            <version>${seata.version}</version>
+        </dependency>
     </dependencies>
 </project>
