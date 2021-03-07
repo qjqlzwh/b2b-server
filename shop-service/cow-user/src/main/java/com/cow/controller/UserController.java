@@ -1,19 +1,19 @@
 package com.cow.controller;
 
-
-import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.jwt.JwtUtils;
 import com.cow.po.dto.UserDTO;
-import com.cow.po.vo.UserVo;
+import com.cow.po.pojo.Role;
+import com.cow.po.pojo.UserRole;
 import com.cow.resp.R;
+import com.cow.service.UserRoleService;
 import com.cow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.cow.po.pojo.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -30,7 +30,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private UserRoleService userRoleService;
 
     /**
      * 登录
@@ -93,6 +94,12 @@ public class UserController {
     @GetMapping("/detail/{id}")
     public R detail(@PathVariable("id") Long id) {
         User user = userService.getById(id);
+        List<UserRole> userRoles = userRoleService.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUser, id));
+        Set<Long> roles = new LinkedHashSet<>();
+        for (UserRole item : userRoles) {
+            roles.add(item.getRole());
+        }
+        user.setRoleList(roles);
         user.setPassword("");
         return R.ok().data(user);
     }

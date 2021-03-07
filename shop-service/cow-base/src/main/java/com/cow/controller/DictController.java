@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -91,6 +92,15 @@ public class DictController {
     @GetMapping("/info/{id}")
     public R info(@PathVariable("id") Long id) {
         Dict dict = dictService.getById(id);
+        return R.ok().data(dict);
+    }
+
+    /**
+     * 根据id获取字典
+     */
+    @GetMapping("/getMapByDcode")
+    public R getMapByDcode(String dcode) {
+        Map<Integer, Object> dict = dictService.getMapByDcode(dcode);
         return R.ok().data(dict);
     }
 

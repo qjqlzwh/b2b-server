@@ -5,6 +5,8 @@ import com.cow.po.dto.OrderDTO;
 import com.cow.po.pojo.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  * 订单 服务类
@@ -20,7 +22,7 @@ public interface OrderService extends IService<Order> {
      * @param orderDTO
      * @return
      */
-    Page<Order> pageData(OrderDTO orderDTO);
+    Page<Map<String, Object>> pageData(OrderDTO orderDTO);
 
     /**
      * 增加

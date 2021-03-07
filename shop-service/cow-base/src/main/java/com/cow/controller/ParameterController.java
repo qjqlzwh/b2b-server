@@ -55,5 +55,16 @@ public class ParameterController {
         parameterService.update(parameter);
         return R.ok();
     }
+
+    /**
+     * 根据id获取
+     * @param id
+     * @return
+     */
+    @GetMapping("/detail/{id}")
+    public R detail(@PathVariable("id") Long id) {
+        Parameter parameter = parameterService.getById(id);
+        return R.ok().data(parameter);
+    }
 }
 

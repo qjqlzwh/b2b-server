@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cow.mapper.CustomerMapper">
 
+    <select id="pageData" resultType="java.util.Map">
+        select c.id, c.dname, c.dcode, c.license_no, c.create_time, c.is_enabled, c.salesman, c.organization
+             , o.dname organization_name, u.username salesman_name
+        from bs_customer c
+             left join bs_organization o on o.id = c.organization
+             left join bs_user u on u.id = c.salesman
+        <trim prefix="where" prefixOverrides="and |or ">
+            <if test="customerDTO.dname != null and customerDTO.dname != ''">
+                and c.dname like concat('%', #{customerDTO.dname}, '%')
+            </if>
+            <if test="customerDTO.dcode != null and customerDTO.dcode != ''">
+                and c.dcode = #{customerDTO.dcode}
+            </if>
+            <if test="customerDTO.isEnabled != null">
+                and c.is_enabled = #{customerDTO.isEnabled}
+            </if>
+        </trim>
+        order by c.id desc
+    </select>
+
     <select id="pageDataPop" resultType="java.util.Map">
         select c.id, c.dname, c.dcode, c.create_time, c.is_enabled, c.salesman, c.organization
              , o.dname organization_name, u.username salesman_name
@@ -18,4 +38,5 @@
         </trim>
         order by c.id desc
     </select>
+
 </mapper>

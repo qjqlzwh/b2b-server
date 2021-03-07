@@ -18,6 +18,7 @@ import com.cow.service.ProductPriceCustomerItemService;
 import com.cow.service.ProductPriceGoodsItemService;
 import com.cow.service.ProductPriceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cow.service.ProductService;
 import com.cow.util.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,8 @@ public class ProductPriceServiceImpl extends ServiceImpl<ProductPriceMapper, Pro
     private ProductPriceGoodsItemService productPriceGoodsItemService;
     @Autowired
     private ProductPriceCustomerItemService productPriceCustomerItemService;
-    @Resource
-    private ProductPriceMapper productPriceMapper;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 列表数据
@@ -112,10 +113,17 @@ public class ProductPriceServiceImpl extends ServiceImpl<ProductPriceMapper, Pro
         Assert.notEmpty(productPrice.getCustomerItem(), "客户明细不能为空！");
 
         // 名称校重
-        Integer count = baseMapper.selectCount(
-                Wrappers.<ProductPrice>lambdaQuery()
-                        .eq(ProductPrice::getDname, productPrice.getDname())
-                        .ne(ProductPrice::getId, productPrice.getId()));
+        Integer count;
+        if (productPrice.getId() == null) {
+            count = baseMapper.selectCount(
+                    Wrappers.<ProductPrice>lambdaQuery()
+                            .eq(ProductPrice::getDname, productPrice.getDname()));
+        } else {
+            count = baseMapper.selectCount(
+                    Wrappers.<ProductPrice>lambdaQuery()
+                            .eq(ProductPrice::getDname, productPrice.getDname())
+                            .ne(ProductPrice::getId, productPrice.getId()));
+        }
         Assert.isTrue(count == 0, "价目表名称已经存在，请换一个名称！");
 
         // 处理客户明细
@@ -148,8 +156,8 @@ public class ProductPriceServiceImpl extends ServiceImpl<ProductPriceMapper, Pro
     public Map<String, Object> detail(Long id) {
         ProductPrice productPrice = baseMapper.selectById(id);
         Map<String, Object> productPriceMap = BeanUtil.beanToMap(productPrice);
-        List<Map<String, Object>> customerItem = productPriceMapper.getCustomerItemById(id);
-        List<Map<String, Object>> productItem = productPriceMapper.getProductItemById(id);
+        List<Map<String, Object>> customerItem = baseMapper.getCustomerItemById(id);
+        List<Map<String, Object>> productItem = baseMapper.getProductItemById(id);
         productPriceMap.put("customerItem", customerItem);
         productPriceMap.put("productItem", productItem);
         return productPriceMap;
@@ -182,16 +190,19 @@ public class ProductPriceServiceImpl extends ServiceImpl<ProductPriceMapper, Pro
     /**
      * 增加产品行的已使用数量
      *
-     * @param productItemId
-     * @param useQuantity    增加的数量
+     * @param productItemId 产品明细行id
+     * @param useQuantity   增加的数量
      */
     @Override
     @Transactional
-    public void addProductItemUseQuantity(Long productItemId, BigDecimal useQuantity) {
+    public void increaseProductUseQuantity(Long productItemId, BigDecimal useQuantity) {
         ProductPriceGoodsItem goodsItem = productPriceGoodsItemService.getById(productItemId);
+        Product product = productService.getById(goodsItem.getProduct());
+        String msg = "产品【"+ product.getDname() +"】";
+        Assert.isTrue(goodsItem.getState() == CommonState.AUDIT.getState(), msg + "价格已经过期");
         BigDecimal totalUseQuantity = useQuantity.add(goodsItem.getUseQuantity());
         if (totalUseQuantity.compareTo(goodsItem.getQuantity()) > 0) {
-            ExceptionUtils.throwRowException("可用库存不足");
+            ExceptionUtils.throwRowException(msg + "库存不足");
         }
         goodsItem.setUseQuantity(totalUseQuantity);
         productPriceGoodsItemService.updateById(goodsItem);

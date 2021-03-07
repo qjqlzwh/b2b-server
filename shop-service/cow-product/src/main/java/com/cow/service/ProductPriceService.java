@@ -53,8 +53,8 @@ public interface ProductPriceService extends IService<ProductPrice> {
 
     /**
      * 增加产品行的已使用数量
-     * @param productItemId
-     * @param useQuantity 增加的数量
+     * @param productItemId 产品明细行id
+     * @param useQuantity   增加的数量
      */
-    void addProductItemUseQuantity(Long productItemId, BigDecimal useQuantity);
+    void increaseProductUseQuantity(Long productItemId, BigDecimal useQuantity);
 }

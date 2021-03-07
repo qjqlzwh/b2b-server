@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  Mapper 接口
+ * 客户 Mapper 接口
  * </p>
  *
  * @author row
@@ -18,5 +18,20 @@ import java.util.Map;
  */
 public interface CustomerMapper extends BaseMapper<Customer> {
 
+    /**
+     * 客户列表数据
+     * @param page
+     * @param customerDTO
+     * @return
+     */
+    Page<Map<String, Object>> pageData(Page page, CustomerDTO customerDTO);
+
+    /**
+     * 客户弹框数据
+     * @param page
+     * @param customerDTO
+     * @return
+     */
     Page<Map<String, Object>> pageDataPop(IPage<Customer> page, CustomerDTO customerDTO);
+
 }

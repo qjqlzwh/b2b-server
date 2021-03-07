@@ -12,15 +12,21 @@ import com.cow.jwt.JwtUtils;
 import com.cow.po.pojo.User;
 import com.cow.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cow.po.pojo.UserRole;
 import com.cow.po.vo.UserVo;
+import com.cow.service.UserRoleService;
 import com.cow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +41,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     /**
      * 登录
@@ -159,7 +168,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void update(User user) {
         User oldUser = baseMapper.selectById(user.getId());
         // 判断用户是否存在
-        if (!oldUser.equals(user.getUsername())) {
+        if (!oldUser.getUsername().equals(user.getUsername())) {
             User eUser = baseMapper.selectOne(new QueryWrapper<User>().eq("username", user.getUsername()));
             Assert.isNull(eUser, "用户名已经存在！");
             oldUser.setUsername(user.getUsername());
@@ -174,6 +183,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         oldUser.setIsEnabled(user.getIsEnabled());
         oldUser.setPhone(user.getPhone());
         oldUser.setEmail(user.getEmail());
+
+        // 处理角色
+        userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUser, user.getId()));
+        if (!CollectionUtils.isEmpty(user.getRoleList())) {
+            List<UserRole> userRoles = new ArrayList<>();
+            for (Long role : user.getRoleList()) {
+                UserRole userRole = new UserRole();
+                userRole.setUser(user.getId());
+                userRole.setRole(role);
+                userRoles.add(userRole);
+            }
+            userRoleService.saveBatch(userRoles);
+        }
+
         baseMapper.updateById(oldUser);
     }
 

@@ -43,8 +43,7 @@ public class CustomerController {
      */
     @GetMapping("/list")
     public R list(CustomerDTO customerDTO) {
-        Page<Customer> page = customerService.pageData(customerDTO);
-        return R.ok().data(page);
+        return R.ok().data(customerService.pageData(customerDTO));
     }
 
     /**

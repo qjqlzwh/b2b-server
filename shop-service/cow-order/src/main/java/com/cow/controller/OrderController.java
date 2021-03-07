@@ -10,6 +10,8 @@ import com.cow.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * <p>
  * 订单 前端控制器
@@ -30,7 +32,7 @@ public class OrderController {
      */
     @GetMapping("/list")
     public R list(OrderDTO orderDTO) {
-        Page<Order> page = orderService.pageData(orderDTO);
+        Page<Map<String, Object>> page = orderService.pageData(orderDTO);
         return R.ok().data(page);
     }
 

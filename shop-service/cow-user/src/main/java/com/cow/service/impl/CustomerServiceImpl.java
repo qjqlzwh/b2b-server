@@ -48,13 +48,14 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
      * @return
      */
     @Override
-    public Page<Customer> pageData(CustomerDTO customerDTO) {
-        QueryWrapper<Customer> qw = new QueryWrapper<>();
-        QwUtils.eq(qw, "salesman", customerDTO.getSalesman());
-        QwUtils.eq(qw, "dname", customerDTO.getDname());
-        QwUtils.eq(qw, "dcode", customerDTO.getDcode());
-        QwUtils.eq(qw, "is_enabled", customerDTO.getIsEnabled());
-        return baseMapper.selectPage(customerDTO.page(), qw);
+    public Page<Map<String, Object>> pageData(CustomerDTO customerDTO) {
+//        QueryWrapper<Customer> qw = new QueryWrapper<>();
+//        QwUtils.eq(qw, "salesman", customerDTO.getSalesman());
+//        QwUtils.eq(qw, "dname", customerDTO.getDname());
+//        QwUtils.eq(qw, "dcode", customerDTO.getDcode());
+//        QwUtils.eq(qw, "is_enabled", customerDTO.getIsEnabled());
+        Page<Map<String, Object>> pageData = baseMapper.pageData(customerDTO.page(), customerDTO);
+        return pageData;
     }
 
     /**

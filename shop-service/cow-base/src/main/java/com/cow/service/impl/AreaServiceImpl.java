@@ -1,6 +1,7 @@
 package com.cow.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -67,7 +68,8 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area> implements Ar
      */
     @Override
 //    @Cacheable(cacheNames = "area", key = "#root.methodName")
-    @Cacheable(value = "area", key = "'allArea'")
+//    @Cacheable(value = "area", key = "'allArea'")
+    @Cached(name = "base:area:", key = "'allArea'", expire = 86400)
     public List<Area> allArea() {
         // 获取所有省级
         List<Area> areas = baseMapper.selectList(Wrappers.<Area>lambdaQuery().isNull(Area::getParentId));

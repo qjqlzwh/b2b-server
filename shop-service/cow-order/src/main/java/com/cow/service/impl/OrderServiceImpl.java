@@ -28,6 +28,7 @@ import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -54,11 +55,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @return
      */
     @Override
-    public Page<Order> pageData(OrderDTO orderDTO) {
-        QueryWrapper<Order> qw = new QueryWrapper<>();
-        QwUtils.eq(qw, "state", orderDTO.getState());
-        QwUtils.eq(qw, "order_type", orderDTO.getOrderType());
-        Page<Order> pageData = baseMapper.selectPage(orderDTO.page(), qw);
+    public Page<Map<String, Object>> pageData(OrderDTO orderDTO) {
+//        QueryWrapper<Order> qw = new QueryWrapper<>();
+//        QwUtils.eq(qw, "state", orderDTO.getState());
+//        QwUtils.eq(qw, "order_type", orderDTO.getOrderType());
+//        Page<Order> pageData = baseMapper.selectPage(orderDTO.page(), qw);
+        Page<Map<String, Object>> pageData = baseMapper.pageData(orderDTO.page(), orderDTO);
         return pageData;
     }
 
@@ -153,13 +155,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             ProductPriceGoodsItemVo goodsItemVo = productPriceFeignClient.infoProductItem(orderItem.getProductPriceGoodsItem()).getData();
             Assert.notNull(goodsItemVo, msg + "价格异常");
             Assert.isTrue(goodsItemVo.getState() == CommonState.AUDIT.getState(), msg + "价格无效");
-            // 订单提交减库存
+            // 订单提交增加特价已使用数量(减库存)
             if (order.getState() == OrderState.SUBMIT.getState()) {
-
+                productPriceFeignClient.increaseProductUseQuantity(orderItem.getProductPriceGoodsItem(), orderItem.getQuantity());
             }
 
             orderItem.setPrice(goodsItemVo.getPrice());
-
             orderItem.setTotalPrice(CalculateUtils.multiply(orderItem.getPrice(), orderItem.getQuantity(), 6));
             orderTotalPrice = CalculateUtils.add(orderTotalPrice, orderItem.getTotalPrice());
         }

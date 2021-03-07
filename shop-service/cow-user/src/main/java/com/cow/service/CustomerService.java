@@ -22,7 +22,7 @@ public interface CustomerService extends IService<Customer> {
      * @param customerDTO
      * @return
      */
-    Page<Customer> pageData(CustomerDTO customerDTO);
+    Page<Map<String, Object>> pageData(CustomerDTO customerDTO);
 
     /**
      * 新增

@@ -1,5 +1,7 @@
 package com.cow.service.impl;
 
+import cn.hutool.core.map.MapUtil;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,12 +13,17 @@ import com.cow.po.dto.DictDTO;
 import com.cow.po.pojo.Dict;
 import com.cow.service.DictService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,6 +35,9 @@ import java.util.List;
  */
 @Service
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     @Transactional
@@ -94,6 +104,36 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 //            dict.setChildDict(childList);
 //        }
         return dictPage;
+    }
+
+    /**
+     * 根据字典编码获取，不包含父级；Map<dvalue, dname> 格式
+     *
+     * @param dcode
+     * @return
+     */
+    @Override
+    @Cached(name = "base:dict:", key = "#dcode", expire = 86400)
+    public Map<Integer, Object> getMapByDcode(String dcode) {
+//        HashOperations hash = redisTemplate.opsForHash();
+//        Map<Integer, Object> dictMap = hash.entries("dict:" + dcode);
+//        if (dictMap != null && !dictMap.isEmpty()) {
+//            return dictMap;
+//        } else {
+//            dictMap = new LinkedHashMap<>();
+//        }
+
+        Map<Integer, Object> dictMap = new LinkedHashMap<>();
+        List<Dict> dictList = baseMapper.selectList(Wrappers.<Dict>lambdaQuery().eq(Dict::getDcode, dcode).isNotNull(Dict::getParentId));
+        for (Dict item : dictList) {
+            dictMap.put(item.getDvalue(), item.getDname());
+        }
+        if (MapUtil.isEmpty(dictMap)) {
+            return null;
+        }
+
+//        hash.putAll("dict:" + dcode, dictMap);
+        return dictMap;
     }
 
 }

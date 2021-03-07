@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cow.po.dto.DictDTO;
 import com.cow.po.pojo.Dict;
 
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -30,4 +32,11 @@ public interface DictService extends IService<Dict> {
      * @param dictDTO
      */
     Page<Dict> pageData(DictDTO dictDTO);
+
+    /**
+     * 根据字典编码获取，不包含父级；Map<dvalue, dname> 格式
+     * @param dcode
+     * @return
+     */
+    Map<Integer, Object> getMapByDcode(String dcode);
 }

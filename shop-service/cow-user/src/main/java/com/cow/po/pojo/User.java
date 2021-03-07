@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -57,6 +58,10 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "0内部用户  1企业用户")
     private Integer userType;
+
+    @ApiModelProperty(value = "用户角色 Set<RoleId>")
+    @TableField(exist = false)
+    private Set<Long> roleList;
 
     public Long getId() {
         return this.id;
@@ -144,5 +149,13 @@ public class User implements Serializable {
 
     public void setUserType(Integer userType) {
         this.userType = userType;
+    }
+
+    public Set<Long> getRoleList() {
+        return this.roleList;
+    }
+
+    public void setRoleList(Set<Long> roleList) {
+        this.roleList = roleList;
     }
 }

@@ -2,4 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cow.mapper.OrderMapper">
 
+    <select id="pageData" resultType="java.util.Map">
+        select o.id, o.create_time, o.sn, o.salesman, o.salesman_name, o.state, o.order_type, o.total_price
+             , o.audit_time, o.memo, o.customer_address, o.sh_consignee, o.sh_province, o.sh_city, o.sh_district
+             , o.sh_phone, o.sh_detailed_address, o.customer, c.dname customer_name, c.dcode customer_code
+             , c.organization, org.dname org_name
+        from bs_order o
+             left join bs_customer c on c.id = o.customer
+             left join bs_organization org on org.id = c.organization
+        <trim prefix="where" prefixOverrides="and |or ">
+            <if test="orderDTO.state != null">
+                and o.state in
+                <foreach item="item" index="index" collection="orderDTO.state" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="orderDTO.orderType != null">
+                and o.order_type = #{orderDTO.orderType}
+            </if>
+            <if test="orderDTO.sn != null and orderDTO.sn != ''">
+                and o.sn = #{orderDTO.sn}
+            </if>
+            <if test="orderDTO.customerName != null and orderDTO.customerName != ''">
+                and c.dname like concat('%', #{orderDTO.customerName}, '%')
+            </if>
+            <if test="orderDTO.salesmanName != null and orderDTO.salesmanName != ''">
+                and o.salesman_name = #{orderDTO.salesmanName}
+            </if>
+        </trim>
+        order by o.id desc
+    </select>
+
 </mapper>

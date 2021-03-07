@@ -40,11 +40,6 @@ public class ProductPriceController {
     private ProductPriceGoodsItemService productPriceGoodsItemService;
     @Autowired
     private ProductPriceCustomerItemService productPriceCustomerItemService;
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private CustomerFeignClient customerFeignClient;
 
     /**
      * 加载列表数据
@@ -73,7 +68,7 @@ public class ProductPriceController {
         return R.ok();
     }
 
-    /**infoCustomerItem
+    /**
      * 审核
      */
     @PostMapping("/audit")
@@ -185,14 +180,14 @@ public class ProductPriceController {
     }
 
     /**
-     * 增加产品行的已使用数量
-     * @param productItemId
-     * @param useQuantity 增加的数量
+     * 增加特价产品使用数量
+     * @param productItemId 产品明细行id
+     * @param useQuantity   要增加的数量
      * @return
      */
-    @PostMapping("/addProductItemUseQuantity")
-    public R addProductItemUseQuantity(@RequestParam("productPriceId") Long productItemId, @RequestParam("useQuantity") BigDecimal useQuantity) {
-        productPriceService.addProductItemUseQuantity(productItemId, useQuantity);
+    @PostMapping(value = "/increaseProductUseQuantity")
+    public R increaseProductUseQuantity(@RequestParam("productItemId") Long productItemId, @RequestParam("useQuantity") BigDecimal useQuantity) {
+        productPriceService.increaseProductUseQuantity(productItemId, useQuantity);
         return R.ok();
     }
 }
