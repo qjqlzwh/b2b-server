@@ -14,8 +14,16 @@ public class PageDTO {
      */
     private long page = 1;
 
+    /**
+     * 是否分页 true 分页  false 不分页
+     */
+    private boolean isPage = true;
+
     public Page page()  {
-        return new Page(this.page, this.limit);
+        if (this.isPage) {
+            return new Page(this.page, this.limit);
+        }
+        return null;
     }
 
     public long getLimit() {
@@ -32,5 +40,13 @@ public class PageDTO {
 
     public void setPage(long page) {
         this.page = page;
+    }
+
+    public boolean getIsPage() {
+        return this.isPage;
+    }
+
+    public void setIsPage(boolean page) {
+        this.isPage = page;
     }
 }

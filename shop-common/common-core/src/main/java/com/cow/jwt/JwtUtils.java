@@ -20,7 +20,7 @@ public class JwtUtils {
      * @param username
      * @return
      */
-    public static String getJwtToken(String id, String username) {
+    public static String generateJwtToken(String id, String username) {
 
         String JwtToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
@@ -93,5 +93,21 @@ public class JwtUtils {
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
         Claims claims = claimsJws.getBody();
         return (String) claims.get("id");
+    }
+
+    /**
+     * 根据token和指定key获取值
+     * @param request
+     * @param key
+     * @return
+     */
+    public static String getValByJwtToken(HttpServletRequest request, String key) {
+        if (StringUtils.hasText(key)) {
+            String jwtToken = request.getHeader("token");
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
+            Claims claims = claimsJws.getBody();
+            return (String) claims.get(key);
+        }
+        return null;
     }
 }
