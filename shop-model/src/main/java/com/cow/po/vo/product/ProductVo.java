@@ -1,11 +1,14 @@
-package com.cow.feign.vo;
+package com.cow.po.vo.product;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductVo {
+public class ProductVo implements Serializable {
+
+    private static final long serialVersionUID = 2490383016604233627L;
 
     private Long id;
 

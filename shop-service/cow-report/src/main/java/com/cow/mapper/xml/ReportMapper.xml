@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cow.mapper.ReportMapper">
+
+    <select id="productPriceData" resultType="java.util.Map">
+        select pp.id, pp.sn, pp.dname, pp.state, pp.start_time, pp.end_time, c.id customer_id
+            , c.dname customer_name, c.dcode customer_code, gi.price, gi.quantity
+            , p.id product_id, p.dname product_name, p.dcode product_code, p.model product_model
+        from bs_product_price pp
+            join bs_product_price_customer_item ci on ci.product_price = pp.id
+            join bs_customer c on c.id = ci.customer
+            join bs_product_price_goods_item gi on gi.product_price = pp.id
+            join bs_product p on p.id = gi.product
+        where pp.state = 2
+            and ci.state = 2
+            and gi.state = 2
+        <if test="productPriceReportDTO.sn != null and productPriceReportDTO.sn != ''">
+            and pp.sn = #{productPriceReportDTO.sn}
+        </if>
+        <if test="productPriceReportDTO.customerName != null and productPriceReportDTO.customerName != ''">
+            and c.dname like concat('%', #{productPriceReportDTO.customerName}, '%')
+        </if>
+        <if test="productPriceReportDTO.customerCode != null and productPriceReportDTO.customerCode != ''">
+            and c.dcode = #{productPriceReportDTO.customerCode}
+        </if>
+        <if test="productPriceReportDTO.productName != null and productPriceReportDTO.productName != ''">
+            and p.dname like concat('%', #{productPriceReportDTO.productName}, '%')
+        </if>
+        <if test="productPriceReportDTO.productCode != null and productPriceReportDTO.productCode != ''">
+            and p.dcode = #{productPriceReportDTO.productCode}
+        </if>
+    </select>
+
+</mapper>

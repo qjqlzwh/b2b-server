@@ -1,4 +1,4 @@
-package com.cow.feign.vo;
+package com.cow.po.vo.user;
 
 import io.swagger.annotations.ApiModelProperty;
 

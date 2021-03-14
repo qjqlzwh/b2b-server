@@ -1,6 +1,7 @@
 package com.cow.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cow.mybatis.Rc;
 import com.cow.po.dto.OrderDTO;
 import com.cow.po.pojo.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -48,4 +49,5 @@ public interface OrderService extends IService<Order> {
      */
     void audit(Order order);
 
+    Rc pageDataDl(OrderDTO orderDTO);
 }

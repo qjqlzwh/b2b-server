@@ -40,6 +40,7 @@ public class AreaController {
      */
     @GetMapping("/list")
     public R list(AreaDTO areaDTO) {
+        System.out.println("线程名：" + Thread.currentThread().getName());
         Page<Area> page = areaService.pageData(areaDTO);
         return R.ok().data(page);
     }

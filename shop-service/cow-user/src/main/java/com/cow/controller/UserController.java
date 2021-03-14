@@ -4,15 +4,16 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.jwt.JwtUtils;
 import com.cow.po.dto.UserDTO;
-import com.cow.po.pojo.Role;
 import com.cow.po.pojo.UserRole;
 import com.cow.resp.R;
 import com.cow.service.UserRoleService;
 import com.cow.service.UserService;
+import com.cow.util.HuExcelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.cow.po.pojo.User;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -112,6 +113,20 @@ public class UserController {
     public R list(UserDTO userDTO) {
         Page<User> userList = userService.userPage(userDTO);
         return R.ok().data(userList);
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param userDTO
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, UserDTO userDTO) {
+        Page<User> userList = userService.userPage(userDTO);
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("username", "用户名");
+        map.put("createTime", "创建时间");
+        HuExcelUtils.exportExcel(response, "用户", userList.getRecords(), map, null);
     }
 
 }

@@ -57,6 +57,7 @@ public class ProductPriceServiceImpl extends ServiceImpl<ProductPriceMapper, Pro
         QwUtils.eq(qw, "sn", productPriceDTO.getSn());
         QwUtils.eq(qw, "state", productPriceDTO.getState());
         QwUtils.like(qw, "name", productPriceDTO.getDname());
+        qw.orderByDesc("id");
         Page<ProductPrice> page = baseMapper.selectPage(productPriceDTO.page(), qw);
         return page;
     }

@@ -43,7 +43,7 @@ public class ParameterServiceImpl extends ServiceImpl<ParameterMapper, Parameter
     @Override
     @Transactional
     public void add(Parameter parameter) {
-        handleData(parameter);
+        handleSaveOrUpdate(parameter);
         Integer codeCount = baseMapper.selectCount(Wrappers.<Parameter>lambdaQuery().eq(Parameter::getDcode, parameter.getDcode()));
         Assert.isTrue(!(codeCount > 0), "参数编码已经重复，请换一个！");
         baseMapper.insert(parameter);
@@ -55,7 +55,7 @@ public class ParameterServiceImpl extends ServiceImpl<ParameterMapper, Parameter
     @Override
     @Transactional
     public void update(Parameter parameter) {
-        handleData(parameter);
+        handleSaveOrUpdate(parameter);
         Integer codeCount = baseMapper.selectCount(
                 Wrappers.<Parameter>lambdaQuery()
                         .eq(Parameter::getDcode, parameter.getDcode())
@@ -76,7 +76,7 @@ public class ParameterServiceImpl extends ServiceImpl<ParameterMapper, Parameter
         return baseMapper.selectOne(Wrappers.<Parameter>lambdaQuery().eq(Parameter::getDcode, "dcode"));
     }
 
-    private void handleData(Parameter parameter) {
+    private void handleSaveOrUpdate(Parameter parameter) {
         Assert.hasText(parameter.getDcode(), "参数编码不能为空！");
         Assert.hasText(parameter.getDname(), "参数名称不能为空！");
         Assert.hasText(parameter.getDvalue(), "参数值不能为空！");

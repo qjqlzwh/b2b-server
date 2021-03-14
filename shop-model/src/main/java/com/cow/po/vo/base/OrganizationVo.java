@@ -1,10 +1,13 @@
-package com.cow.feign.vo;
+package com.cow.po.vo.base;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class OrganizationVo {
+public class OrganizationVo implements Serializable {
+
+    private static final long serialVersionUID = -5852172544952980799L;
 
     private Long id;
 

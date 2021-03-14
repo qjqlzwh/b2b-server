@@ -2,8 +2,6 @@ package com.cow.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cow.feign.user.CustomerFeignClient;
-import com.cow.feign.vo.ProductPriceCustomerItemVo;
 import com.cow.po.dto.ProductPriceDTO;
 import com.cow.po.enums.CommonState;
 import com.cow.po.pojo.ProductPrice;
@@ -13,7 +11,6 @@ import com.cow.resp.R;
 import com.cow.service.ProductPriceCustomerItemService;
 import com.cow.service.ProductPriceGoodsItemService;
 import com.cow.service.ProductPriceService;
-import com.cow.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;

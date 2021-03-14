@@ -1,10 +1,8 @@
-package com.cow.feign.vo;
+package com.cow.po.vo.user;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**

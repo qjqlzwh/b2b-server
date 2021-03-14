@@ -1,19 +1,17 @@
 package com.cow.service.impl;
 
 import cn.hutool.core.util.IdUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cow.mybatis.QwUtils;
 import com.cow.po.dto.UserDTO;
 import com.cow.exception.ExceptionUtils;
 import com.cow.jwt.JwtUtils;
 import com.cow.po.pojo.User;
 import com.cow.mapper.UserMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cow.po.pojo.UserRole;
-import com.cow.po.vo.UserVo;
 import com.cow.service.UserRoleService;
 import com.cow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,14 +67,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             ExceptionUtils.throwRowException("密码错误");
         }
 
-        JwtUtils.getJwtToken(user.getId().toString(), user.getUsername());
+//        JwtUtils.getJwtToken(user.getId().toString(), user.getUsername());
 
         // redis
 //        String token = IdUtil.fastSimpleUUID();
 //        redisTemplate.opsForValue().set(RedisGroup.LOGIN + token, user, RedisExpire.LOGIN_TIME);
 
         // JWT方案
-        String token = JwtUtils.getJwtToken(user.getId().toString(), user.getUsername());
+        String token = JwtUtils.generateJwtToken(user.getId().toString(), user.getUsername());
         return token;
     }
 
@@ -131,15 +129,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Page<User> userPage(UserDTO userDTO) {
-////        Wrappers.lambdaQuery().
-//        LambdaQueryWrapper<User> qw = Wrappers.lambdaQuery(User.class);
-////        User::getUsername
-//
-////        QwUtils.eq(qw, User::getUsername, userDTO.getUsername());
-//        qw.eq(User::getUsername, userDTO.getUsername());
-////        LambdaQueryWrapper<User> eq = userLambdaQueryWrapper.eq(User::getIsEnabled, true);
-////        userLambdaQueryWrapper.eq
-
         QueryWrapper<User> qw = new QueryWrapper<>();
         QwUtils.eq(qw, "username", userDTO.getUsername());
         QwUtils.eq(qw, "is_enabled", userDTO.getIsEnabled());

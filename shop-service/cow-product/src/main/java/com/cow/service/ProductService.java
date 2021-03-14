@@ -1,6 +1,7 @@
 package com.cow.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cow.mybatis.Rc;
 import com.cow.po.dto.ProductDTO;
 import com.cow.po.pojo.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -30,11 +31,11 @@ public interface ProductService extends IService<Product> {
     void update(Product product);
 
     /**
-     * 列表数据
+     * 弹框列表数据
      * @param productDTO
      * @return
      */
-    Page<Product> pageData(ProductDTO productDTO);
+    Page<Product> pageDataPop(ProductDTO productDTO);
 
     /**
      * 加载弹框列表数据(带价格产品，如订单选产品)
@@ -42,4 +43,11 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     Page<Map<String, Object>> popPriceList(ProductDTO productDTO);
+
+    /**
+     * 列表数据
+     * @param productDTO
+     * @return
+     */
+    Rc pageData(ProductDTO productDTO);
 }

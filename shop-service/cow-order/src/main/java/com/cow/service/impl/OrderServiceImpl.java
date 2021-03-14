@@ -1,30 +1,35 @@
 package com.cow.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cow.constant.MqTopic;
 import com.cow.feign.product.ProductFeignClient;
 import com.cow.feign.product.ProductPriceFeignClient;
-import com.cow.feign.vo.ProductPriceGoodsItemVo;
-import com.cow.feign.vo.ProductPriceVo;
-import com.cow.feign.vo.ProductVo;
-import com.cow.mybatis.QwUtils;
+import com.cow.feign.user.CustomerFeignClient;
+import com.cow.po.vo.product.ProductPriceGoodsItemVo;
+import com.cow.po.vo.product.ProductPriceVo;
+import com.cow.po.vo.product.ProductVo;
+import com.cow.mybatis.Rc;
 import com.cow.po.dto.OrderDTO;
 import com.cow.po.enums.CommonState;
 import com.cow.po.enums.OrderState;
 import com.cow.po.pojo.Order;
 import com.cow.mapper.OrderMapper;
 import com.cow.po.pojo.OrderItem;
+import com.cow.po.vo.order.OrderVo;
 import com.cow.service.OrderItemService;
 import com.cow.service.OrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cow.util.CalculateUtils;
 import com.cow.util.IdUtils;
+import com.cow.util.WebUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +49,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private OrderItemService orderItemService;
     @Autowired
+    private CustomerFeignClient customerFeignClient;
+    @Autowired
     private ProductFeignClient productFeignClient;
     @Autowired
     private ProductPriceFeignClient productPriceFeignClient;
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
 
     /**
      * 列表数据
@@ -93,8 +102,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         handleSaveOrUpdate(order);
         baseMapper.updateById(order);
         // 删除旧的明细
-        List<OrderItem> oldOrderItems = orderItemService.list(Wrappers.<OrderItem>lambdaQuery().eq(OrderItem::getOrderId, order.getId()));
-        orderItemService.removeByIds(oldOrderItems);
+        orderItemService.remove(Wrappers.<OrderItem>lambdaQuery().eq(OrderItem::getOrderId, order.getId()));
 
         orderItemService.saveBatch(order.getOrderItemList());
     }
@@ -122,6 +130,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setState(OrderState.AUDIT.getState());
         order.setAuditTime(new Date());
         baseMapper.updateById(order);
+
+        OrderVo orderVo = new OrderVo();
+        orderVo.setId(order.getId());
+        orderVo.setSn(order.getSn());
+        orderVo.setSalesman(order.getSalesman());
+        orderVo.setCustomer(order.getCustomer());
+        orderVo.setCreator(WebUtils.getLoginUsername());
+        orderVo.setContent("订单审核通过,订单号：" + order.getSn());
+        orderVo.setSubject("订单审核");
+        rocketMQTemplate.convertAndSend(MqTopic.ORDER_AUDIT, orderVo);
+    }
+
+    @Override
+    public Rc pageDataDl(OrderDTO orderDTO) {
+        Page<Map<String, Object>> pageData = baseMapper.pageData(orderDTO.page(), orderDTO);
+        return null;
     }
 
     private void handleSaveOrUpdate(Order order) {

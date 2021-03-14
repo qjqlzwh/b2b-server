@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cow.mapper.NoticeMapper">
+
+    <select id="pageData" resultType="java.util.Map">
+        select n.id, n.create_time, n.creator, n.content, n.type, n.subject, n.source_id
+             , nu.is_read, nu.recipient, u.username
+        from bs_notice n
+             join bs_notice_user nu on nu.notice = n.id
+             join bs_user u on u.id = nu.recipient
+    </select>
+
+</mapper>

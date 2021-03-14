@@ -1,4 +1,4 @@
-package com.cow.feign.vo;
+package com.cow.po.vo.product;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,7 +16,9 @@ import java.util.Date;
  * @since 2021-02-22
  */
 @ApiModel(value = "ProductPriceGoodsItemVo对象", description = "产品价格 - 商品明细")
-public class ProductPriceGoodsItemVo {
+public class ProductPriceGoodsItemVo implements Serializable {
+
+    private static final long serialVersionUID = 2315561609494023296L;
 
     private Long id;
 
