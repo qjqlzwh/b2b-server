@@ -23,7 +23,7 @@ import org.springframework.util.CollectionUtils;
 public class HuExcelUtils {
 
     /**
-     * excel 导出工具类，字段和别名可以不用分开
+     * excel 导出工具类
      *
      * @param response
      * @param fileName    文件名

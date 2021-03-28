@@ -20,10 +20,10 @@ public class PageDTO {
     private boolean isPage = true;
 
     public Page page()  {
-        if (this.isPage) {
-            return new Page(this.page, this.limit);
+        if (!this.isPage) {
+            this.limit = -1;
         }
-        return null;
+        return new Page(this.page, this.limit);
     }
 
     public long getLimit() {
