@@ -3,7 +3,6 @@ package com.cow.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.po.dto.NoticeDTO;
-import com.cow.po.dto.ParameterDTO;
 import com.cow.po.pojo.Notice;
 import com.cow.resp.R;
 import com.cow.service.NoticeService;

@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 @RocketMQMessageListener(consumerGroup = "order-notice-consumer", topic = MqTopic.ORDER_AUDIT)
-public class OrderListenerConsumer implements RocketMQListener<OrderVo> {
+public class OrderNoticeListener implements RocketMQListener<OrderVo> {
 
     @Autowired
     private NoticeService noticeService;

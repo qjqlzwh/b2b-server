@@ -7,7 +7,6 @@ import com.cow.po.pojo.Area;
 import com.cow.resp.R;
 import com.cow.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

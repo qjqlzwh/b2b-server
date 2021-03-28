@@ -1,6 +1,6 @@
 package com.cow.feign.base;
 
-import com.cow.feign.vo.OrganizationVo;
+import com.cow.po.vo.base.OrganizationVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

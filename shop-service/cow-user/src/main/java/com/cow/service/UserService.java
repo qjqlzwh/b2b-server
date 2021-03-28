@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.po.dto.UserDTO;
 import com.cow.po.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cow.po.vo.UserVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -48,4 +49,11 @@ public interface UserService extends IService<User> {
      * @param user
      */
     void update(User user);
+
+    /**
+     * 测试分页导出
+     * @param userDTO
+     * @return
+     */
+    Page<Map<String, Object>> testPageExport(UserDTO userDTO);
 }

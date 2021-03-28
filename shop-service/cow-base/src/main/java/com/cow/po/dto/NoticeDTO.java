@@ -36,6 +36,8 @@ public class NoticeDTO extends PageDTO {
     @ApiModelProperty(value = "主题")
     private String subject;
 
+    @ApiModelProperty(value = "接收人（bs_user）")
+    private Long recipient;
 
     public Long getId() {
         return id;
@@ -85,4 +87,11 @@ public class NoticeDTO extends PageDTO {
         this.subject = subject;
     }
 
+    public Long getRecipient() {
+        return this.recipient;
+    }
+
+    public void setRecipient(Long recipient) {
+        this.recipient = recipient;
+    }
 }

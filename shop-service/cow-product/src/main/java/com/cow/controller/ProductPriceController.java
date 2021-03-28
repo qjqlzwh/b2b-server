@@ -178,13 +178,17 @@ public class ProductPriceController {
 
     /**
      * 增加特价产品使用数量
-     * @param productItemId 产品明细行id
+     * @param productItemId 价格表产品明细行id
      * @param useQuantity   要增加的数量
      * @return
      */
     @PostMapping(value = "/increaseProductUseQuantity")
     public R increaseProductUseQuantity(@RequestParam("productItemId") Long productItemId, @RequestParam("useQuantity") BigDecimal useQuantity) {
-        productPriceService.increaseProductUseQuantity(productItemId, useQuantity);
+        try {
+            productPriceService.increaseProductUseQuantity(productItemId, useQuantity);
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
         return R.ok();
     }
 }

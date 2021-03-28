@@ -1,13 +1,16 @@
 package com.cow.feign.product;
 
-import com.cow.feign.vo.ProductPriceCustomerItemVo;
-import com.cow.feign.vo.ProductPriceGoodsItemVo;
-import com.cow.feign.vo.ProductPriceVo;
+import com.cow.po.vo.product.ProductPriceCustomerItemVo;
+import com.cow.po.vo.product.ProductPriceGoodsItemVo;
+import com.cow.po.vo.product.ProductPriceVo;
 import com.cow.resp.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.math.BigDecimal;
 
 /**
  * 产品
@@ -47,4 +50,13 @@ public interface ProductPriceFeignClient {
      */
     @GetMapping("/product-price/infoProductItem/{productItemId}")
     R<ProductPriceGoodsItemVo> infoProductItem(@PathVariable("productItemId") Long productItemId);
+
+    /**
+     * 增加特价产品使用数量
+     * @param productItemId 价格表产品明细行id
+     * @param useQuantity   要增加的数量
+     * @return
+     */
+    @PostMapping(value = "/product-price/increaseProductUseQuantity")
+    R increaseProductUseQuantity(@RequestParam("productItemId") Long productItemId, @RequestParam("useQuantity") BigDecimal useQuantity);
 }

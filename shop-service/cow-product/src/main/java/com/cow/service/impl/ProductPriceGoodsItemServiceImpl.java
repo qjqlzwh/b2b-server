@@ -1,7 +1,6 @@
 package com.cow.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.cow.po.pojo.ProductPriceCustomerItem;
 import com.cow.po.pojo.ProductPriceGoodsItem;
 import com.cow.mapper.ProductPriceGoodsItemMapper;
 import com.cow.service.ProductPriceGoodsItemService;

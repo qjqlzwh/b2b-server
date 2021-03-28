@@ -12,7 +12,6 @@ import com.cow.po.pojo.Area;
 import com.cow.mapper.AreaMapper;
 import com.cow.service.AreaService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

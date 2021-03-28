@@ -1,9 +1,6 @@
 package com.cow.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cow.jwt.JwtUtils;
-import com.cow.mybatis.QwUtils;
 import com.cow.po.dto.NoticeDTO;
 import com.cow.po.pojo.Notice;
 import com.cow.mapper.NoticeMapper;
@@ -34,10 +31,8 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public Page<Map<String, Object>> pageData(NoticeDTO noticeDTO) {
-        QueryWrapper<Notice> qw = new QueryWrapper<>();
-        QwUtils.eq(qw, "subject", noticeDTO.getSubject());
-        QwUtils.eq(qw, "creator", noticeDTO.getCreator());
-        return baseMapper.selectMapsPage(noticeDTO.page(), qw);
+        noticeDTO.setRecipient(Long.valueOf(WebUtils.getLoginUserId()));
+        return baseMapper.pageData(noticeDTO.page(), noticeDTO);
     }
 
     /**

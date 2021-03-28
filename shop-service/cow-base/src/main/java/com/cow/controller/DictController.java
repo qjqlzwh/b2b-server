@@ -8,8 +8,6 @@ import com.cow.po.pojo.Dict;
 import com.cow.resp.R;
 import com.cow.service.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -96,7 +94,7 @@ public class DictController {
     }
 
     /**
-     * 根据id获取字典
+     * 根据编码获取字典
      */
     @GetMapping("/getMapByDcode")
     public R getMapByDcode(String dcode) {

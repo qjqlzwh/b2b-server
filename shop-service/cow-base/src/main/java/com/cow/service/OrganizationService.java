@@ -2,7 +2,6 @@ package com.cow.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.po.dto.OrganizationDTO;
-import com.cow.po.pojo.Dict;
 import com.cow.po.pojo.Organization;
 import com.baomidou.mybatisplus.extension.service.IService;
 

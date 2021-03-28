@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -189,18 +190,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         baseMapper.updateById(oldUser);
     }
 
-    public static void main(String[] args) {
-//        String uuid = IdUtil.simpleUUID();
-//        String uuid2 = IdUtil.fastSimpleUUID();
-        String password = "123456";
-//        String md1 = DigestUtils.md5DigestAsHex(password.getBytes());
-//        String md2 = SecureUtil.md5(password);
-//        System.out.println(md1);
-//        System.out.println(md2);
-//        System.out.println(uuid);
-//        System.out.println(uuid2);
-//        System.out.println(SecureUtil.md5(password+uuid2));
-//        System.out.println(password.length());
-        System.out.println(DigestUtils.md5DigestAsHex(("123456" + "a3df43feed7f4cd2bbec8008f4b40391").getBytes()));
+    /**
+     * 测试分页导出
+     *
+     * @param userDTO
+     * @return
+     */
+    @Override
+    public Page<Map<String, Object>> testPageExport(UserDTO userDTO) {
+        QueryWrapper<User> qw = new QueryWrapper<>();
+//        QwUtils.eq(qw, "username", "root");
+        return baseMapper.selectMapsPage(userDTO.page(), qw);
+//        return baseMapper.pageData(userDTO.page(), userDTO);
     }
+
 }

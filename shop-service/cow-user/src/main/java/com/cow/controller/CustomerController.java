@@ -92,11 +92,11 @@ public class CustomerController {
         customer.setCustomerAddressList(
                 customerAddressService.list(
                         Wrappers.<CustomerAddress>lambdaQuery().eq(CustomerAddress::getCustomerId, id)));
-        Map<String, Object> customerMap = BeanUtil.beanToMap(customer);
-        customerMap.put("orgName", organizationFeignClient.info(customer.getOrganization()).getDname());
-        User salesman = userService.getById(customer.getSalesman());
-        customerMap.put("salesmanName", salesman.getUsername());
-        return R.ok().data(customerMap);
+//        Map<String, Object> customerMap = BeanUtil.beanToMap(customer);
+//        customerMap.put("orgName", organizationFeignClient.info(customer.getOrganization()).getDname());
+//        User salesman = userService.getById(customer.getSalesman());
+//        customerMap.put("salesmanName", salesman.getUsername());
+        return R.ok().data(customer);
     }
 
     /**

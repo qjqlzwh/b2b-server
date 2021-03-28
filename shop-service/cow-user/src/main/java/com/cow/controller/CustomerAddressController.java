@@ -2,7 +2,6 @@ package com.cow.controller;
 
 
 import com.cow.po.pojo.CustomerAddress;
-import com.cow.resp.R;
 import com.cow.service.CustomerAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

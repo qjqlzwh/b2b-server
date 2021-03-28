@@ -1,6 +1,6 @@
 package com.cow.feign.user;
 
-import com.cow.feign.vo.UserVo;
+import com.cow.po.vo.user.UserVo;
 import com.cow.resp.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

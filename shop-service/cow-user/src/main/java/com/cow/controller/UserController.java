@@ -122,11 +122,23 @@ public class UserController {
      */
     @GetMapping("/export")
     public void export(HttpServletResponse response, UserDTO userDTO) {
-        Page<User> userList = userService.userPage(userDTO);
+        userDTO.setIsPage(false);
+        Page<Map<String, Object>> userList = userService.testPageExport(userDTO);
         Map<String, String> map = new LinkedHashMap<>();
         map.put("username", "用户名");
-        map.put("createTime", "创建时间");
+        map.put("create_time", "创建时间");
         HuExcelUtils.exportExcel(response, "用户", userList.getRecords(), map, null);
+    }
+
+    /**
+     * 列表数据
+     * @param response
+     * @param userDTO
+     */
+    @GetMapping("/listData")
+    public R listData(HttpServletResponse response, UserDTO userDTO) {
+        Page<Map<String, Object>> userList = userService.testPageExport(userDTO);
+        return R.ok().data(userList);
     }
 
 }

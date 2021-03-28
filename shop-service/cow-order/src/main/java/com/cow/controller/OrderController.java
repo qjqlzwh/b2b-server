@@ -7,11 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.feign.base.OrganizationFeignClient;
 import com.cow.feign.user.CustomerFeignClient;
 import com.cow.po.vo.user.CustomerVo;
-import com.cow.mybatis.Rc;
 import com.cow.po.dto.OrderDTO;
 import com.cow.po.pojo.Order;
 import com.cow.po.pojo.OrderItem;
-import com.cow.po.vo.base.OrganizationVo;
 import com.cow.service.OrderItemService;
 import com.cow.service.OrderService;
 import com.cow.resp.R;
@@ -88,6 +86,8 @@ public class OrderController {
     @PostMapping("/audit")
     public R audit(HttpServletRequest request, Long id) {
         Order order = orderService.getById(id);
+        List<OrderItem> orderItems = orderItemService.list(Wrappers.<OrderItem>lambdaQuery().eq(OrderItem::getOrderId, id).orderByAsc(OrderItem::getId));
+        order.setOrderItemList(orderItems);
         orderService.audit(order);
         return R.ok();
     }
@@ -103,10 +103,10 @@ public class OrderController {
         Order order = orderService.getById(id);
         Map<String, Object> orderMap = BeanUtil.beanToMap(order);
         CustomerVo customerVo = customerFeignClient.info(order.getCustomer()).getData();
-        OrganizationVo organizationVo = organizationFeignClient.info(customerVo.getOrganization());
+//        OrganizationVo organizationVo = organizationFeignClient.info(customerVo.getOrganization());
         List<OrderItem> orderItems = orderItemService.list(Wrappers.<OrderItem>lambdaQuery().eq(OrderItem::getOrderId, id));
         orderMap.put("organization", customerVo.getOrganization());
-        orderMap.put("organizationName", organizationVo.getDname());
+        orderMap.put("organizationName", customerVo.getOrgName());
         orderMap.put("orderItemList", orderItems);
         return R.ok().data(orderMap);
     }
@@ -118,11 +118,11 @@ public class OrderController {
     @GetMapping("/download")
     public void download(HttpServletResponse response, OrderDTO orderDTO) {
         orderDTO.setIsPage(false);
-        Rc rc = orderService.pageDataDl(orderDTO);
+        Page<Map<String, Object>> pageData = orderService.pageData(orderDTO);
         Map<String, String> map = new LinkedHashMap<>();
         map.put("dname", "产品名称");
         map.put("dcode", "产品编码");
-        HuExcelUtils.exportExcel(response, "产品", rc.getListData(), map, null);
+        HuExcelUtils.exportExcel(response, "产品", pageData.getRecords(), map, null);
     }
 
 }

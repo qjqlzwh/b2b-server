@@ -42,6 +42,9 @@ public class Customer implements Serializable {
     @ApiModelProperty(value = "机构（bs_organization）")
     private Long organization;
 
+    @ApiModelProperty(value = "机构名称")
+    private String orgName;
+
     @ApiModelProperty(value = "客户名称")
     private String dname;
 
@@ -56,6 +59,9 @@ public class Customer implements Serializable {
 
     @ApiModelProperty(value = "业务员（bs_user）")
     private Long salesman;
+
+    @ApiModelProperty(value = "业务员名称")
+    private String salesmanName;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "客户收货地址")
@@ -139,6 +145,22 @@ public class Customer implements Serializable {
 
     public void setSalesman(Long salesman) {
         this.salesman = salesman;
+    }
+
+    public String getOrgName() {
+        return this.orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getSalesmanName() {
+        return this.salesmanName;
+    }
+
+    public void setSalesmanName(String salesmanName) {
+        this.salesmanName = salesmanName;
     }
 
     public List<CustomerAddress> getCustomerAddressList() {

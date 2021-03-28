@@ -9,6 +9,7 @@
 | cow-product（产品服务） | 8003 |
 | cow-order（订单服务） | 8004 |
 | cow-report（报表服务） | 8005 |
+| cow-interface（接口服务） | 8006 |
 
 
 ### 应用端口
@@ -19,6 +20,8 @@
 | Redis | 6379 |
 | Nacos | 8848 |
 | RocketMQ | 9876 |
+| Zipkin | 9411 |
+| Seata | 8091 |
 
 ### 功能规划
 
@@ -43,6 +46,8 @@
 |  | 订单返利 |||
 | 权限 | 列表、按钮权限 |||
 | 报表 | 产品价格报表 |100%||
+| 接口 | 接口配置 |70%||
+|  | 接口日志 |||
 | 其他 | 文件上传 |||
 |  | 短信发送 |||
 | | 权限 |||
@@ -57,4 +62,17 @@
 ./bin> start mqbroker.cmd -n localhost:9876
 ```
 
+## Zipkin
+```text
+1、启动 zipkin jar
+    jar 下载地址: https://dl.bintray.com/openzipkin/maven/io/zipkin/java/zipkin-server/
+1.1、启动时以mysql做为存储
+    java -jar zipkin-server-2.12.9-exec.jar --STORAGE_TYPE=mysql --MYSQL_HOST=127.0.0.1 --MYSQL_TCP_PORT=3306 --MYSQL_DB=zipkin --MYSQL_USER=root --MYSQL_PASS=123456
+2、页面 http://localhost:9411/
+```
+
+## 启动Seata
+```text
+start seata-server.bat -p 8091 -h 192.168.99.1
+```
 

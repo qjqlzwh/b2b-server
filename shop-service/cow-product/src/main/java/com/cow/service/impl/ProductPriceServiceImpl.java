@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.exception.ExceptionUtils;
-import com.cow.feign.user.CustomerFeignClient;
 import com.cow.mybatis.QwUtils;
 import com.cow.po.dto.ProductPriceDTO;
 import com.cow.po.enums.CommonState;
@@ -20,12 +19,12 @@ import com.cow.service.ProductPriceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cow.service.ProductService;
 import com.cow.util.IdUtils;
+import io.seata.core.context.RootContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +196,11 @@ public class ProductPriceServiceImpl extends ServiceImpl<ProductPriceMapper, Pro
     @Override
     @Transactional
     public void increaseProductUseQuantity(Long productItemId, BigDecimal useQuantity) {
+        String xid = RootContext.getXID();
+        System.out.println("xid: " + xid);
+
+//        ExceptionUtils.throwRowException("自定义异常！123-------------------");
+
         ProductPriceGoodsItem goodsItem = productPriceGoodsItemService.getById(productItemId);
         Product product = productService.getById(goodsItem.getProduct());
         String msg = "产品【"+ product.getDname() +"】";

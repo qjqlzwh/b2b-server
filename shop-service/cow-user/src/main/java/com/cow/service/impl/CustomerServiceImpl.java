@@ -1,9 +1,7 @@
 package com.cow.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cow.mybatis.QwUtils;
 import com.cow.po.dto.CustomerDTO;
 import com.cow.po.pojo.Customer;
 import com.cow.mapper.CustomerMapper;

@@ -14,7 +14,6 @@ import com.cow.po.pojo.Dict;
 import com.cow.service.DictService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,14 +114,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     @Cached(name = "base:dict:", key = "#dcode", expire = 86400)
     public Map<Integer, Object> getMapByDcode(String dcode) {
-//        HashOperations hash = redisTemplate.opsForHash();
-//        Map<Integer, Object> dictMap = hash.entries("dict:" + dcode);
-//        if (dictMap != null && !dictMap.isEmpty()) {
-//            return dictMap;
-//        } else {
-//            dictMap = new LinkedHashMap<>();
-//        }
-
         Map<Integer, Object> dictMap = new LinkedHashMap<>();
         List<Dict> dictList = baseMapper.selectList(Wrappers.<Dict>lambdaQuery().eq(Dict::getDcode, dcode).isNotNull(Dict::getParentId));
         for (Dict item : dictList) {
@@ -131,8 +122,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         if (MapUtil.isEmpty(dictMap)) {
             return null;
         }
-
-//        hash.putAll("dict:" + dcode, dictMap);
         return dictMap;
     }
 

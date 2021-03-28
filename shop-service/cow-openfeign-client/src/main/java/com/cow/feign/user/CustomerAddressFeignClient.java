@@ -1,6 +1,6 @@
 package com.cow.feign.user;
 
-import com.cow.feign.vo.CustomerAddressVo;
+import com.cow.po.vo.user.CustomerAddressVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

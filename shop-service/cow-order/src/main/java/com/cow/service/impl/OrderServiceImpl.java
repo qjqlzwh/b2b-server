@@ -3,13 +3,13 @@ package com.cow.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cow.constant.MqTopic;
+import com.cow.exception.ExceptionUtils;
 import com.cow.feign.product.ProductFeignClient;
 import com.cow.feign.product.ProductPriceFeignClient;
 import com.cow.feign.user.CustomerFeignClient;
 import com.cow.po.vo.product.ProductPriceGoodsItemVo;
 import com.cow.po.vo.product.ProductPriceVo;
 import com.cow.po.vo.product.ProductVo;
-import com.cow.mybatis.Rc;
 import com.cow.po.dto.OrderDTO;
 import com.cow.po.enums.CommonState;
 import com.cow.po.enums.OrderState;
@@ -17,23 +17,28 @@ import com.cow.po.pojo.Order;
 import com.cow.mapper.OrderMapper;
 import com.cow.po.pojo.OrderItem;
 import com.cow.po.vo.order.OrderVo;
+import com.cow.resp.R;
 import com.cow.service.OrderItemService;
 import com.cow.service.OrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cow.util.CalculateUtils;
 import com.cow.util.IdUtils;
 import com.cow.util.WebUtils;
+import io.seata.core.context.RootContext;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -101,10 +106,28 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public void update(Order order) {
         handleSaveOrUpdate(order);
         baseMapper.updateById(order);
-        // 删除旧的明细
-        orderItemService.remove(Wrappers.<OrderItem>lambdaQuery().eq(OrderItem::getOrderId, order.getId()));
 
-        orderItemService.saveBatch(order.getOrderItemList());
+        List<Long> orderItemIds = order.getOrderItemList()
+                .stream()
+                .filter(orderItem -> orderItem.getId() != null)
+                .map(OrderItem::getId)
+                .collect(Collectors.toList());
+
+        // 删除旧的明细
+        if (CollectionUtils.isEmpty(orderItemIds)) {
+            orderItemService.remove(
+                    Wrappers.<OrderItem>lambdaQuery()
+                            .eq(OrderItem::getOrderId, order.getId())
+            );
+        } else {
+            orderItemService.remove(
+                    Wrappers.<OrderItem>lambdaQuery()
+                            .eq(OrderItem::getOrderId, order.getId())
+                            .notIn(OrderItem::getId, orderItemIds)
+            );
+        }
+
+        orderItemService.saveOrUpdateBatch(order.getOrderItemList());
     }
 
     /**
@@ -126,26 +149,36 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      */
     @Override
     @Transactional
+    @GlobalTransactional
     public void audit(Order order) {
+        String xid = RootContext.getXID();
+        System.out.println("xid: " + xid);
+
         order.setState(OrderState.AUDIT.getState());
         order.setAuditTime(new Date());
+
+        // 扣减库存
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            R r = productPriceFeignClient.increaseProductUseQuantity(orderItem.getProductPriceGoodsItem(), orderItem.getQuantity());
+            if (r.getCode() != 200) {
+                ExceptionUtils.throwRowException(r.getMessage());
+            }
+        }
+
         baseMapper.updateById(order);
 
+//        ExceptionUtils.throwRowException("自定义异常！-------------------");
+
+        // 发送MQ
         OrderVo orderVo = new OrderVo();
         orderVo.setId(order.getId());
         orderVo.setSn(order.getSn());
         orderVo.setSalesman(order.getSalesman());
         orderVo.setCustomer(order.getCustomer());
         orderVo.setCreator(WebUtils.getLoginUsername());
-        orderVo.setContent("订单审核通过,订单号：" + order.getSn());
+        orderVo.setContent("订单审核通过，订单号：" + order.getSn());
         orderVo.setSubject("订单审核");
         rocketMQTemplate.convertAndSend(MqTopic.ORDER_AUDIT, orderVo);
-    }
-
-    @Override
-    public Rc pageDataDl(OrderDTO orderDTO) {
-        Page<Map<String, Object>> pageData = baseMapper.pageData(orderDTO.page(), orderDTO);
-        return null;
     }
 
     private void handleSaveOrUpdate(Order order) {

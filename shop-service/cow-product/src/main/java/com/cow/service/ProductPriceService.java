@@ -6,7 +6,6 @@ import com.cow.po.pojo.ProductPrice;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 /**

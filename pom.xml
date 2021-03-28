@@ -51,6 +51,7 @@
         <jetcache.version>2.6.0</jetcache.version>
         <rocketmq-spring.version>2.2.0</rocketmq-spring.version>
         <rocketmq-client.version>4.8.0</rocketmq-client.version>
+        <spring-cloud-alibaba-seata.version>2.1.1.RELEASE</spring-cloud-alibaba-seata.version>
     </properties>
 
     <dependencyManagement>
@@ -69,6 +70,24 @@
                 <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Seata -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-seata</artifactId>
+                <version>${spring-cloud-alibaba-seata.version}</version>
+<!--                <exclusions>-->
+<!--                    <exclusion>-->
+<!--                        <artifactId>seata-all</artifactId>-->
+<!--                        <groupId>io.seata</groupId>-->
+<!--                    </exclusion>-->
+<!--                </exclusions>-->
+            </dependency>
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-all</artifactId>
+                <version>${seata.version}</version>
             </dependency>
 
             <!--mybatis-plus 持久层-->

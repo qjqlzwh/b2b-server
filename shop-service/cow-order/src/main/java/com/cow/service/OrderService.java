@@ -49,5 +49,4 @@ public interface OrderService extends IService<Order> {
      */
     void audit(Order order);
 
-    Rc pageDataDl(OrderDTO orderDTO);
 }
