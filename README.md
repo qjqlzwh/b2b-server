@@ -94,6 +94,9 @@ start seata-server.bat -p 8091 -h 192.168.99.1
 ```
 
 ## 项目截图
+![image](https://user-images.githubusercontent.com/42276880/112841841-90657700-90d3-11eb-80bf-54de64dea428.png)
+
+
 ![img_1.png](doc/img/img_1.png)
 ![img_2.png](doc/img/img_2.png)
 ![img_3.png](doc/img/img_3.png)
